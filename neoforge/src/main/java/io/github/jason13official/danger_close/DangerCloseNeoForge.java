@@ -1,5 +1,6 @@
 package io.github.jason13official.danger_close;
 
+import io.github.jason13official.danger_close.impl.common.config.ModConfigIO;
 import io.github.jason13official.danger_close.impl.common.registry.ModBlocks;
 import io.github.jason13official.danger_close.impl.common.registry.ModEntities;
 import io.github.jason13official.danger_close.impl.common.registry.ModItems;
@@ -13,9 +14,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -23,6 +27,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 @Mod(Constants.MOD_ID)
@@ -43,6 +48,17 @@ public class DangerCloseNeoForge {
     bind(Registries.CREATIVE_MODE_TAB, ModTabs::register);
 
     EVENT_BUS.addListener((Consumer<FMLCommonSetupEvent>) event -> DangerClose.init());
+
+    EVENT_BUS.addListener((Consumer<EntityTickEvent.Pre>) event -> {
+
+      Level abstractLevel = event.getEntity().level();
+
+      if (abstractLevel instanceof ServerLevel level &&
+          level.getGameTime() % 2 == 0 &&
+          event.getEntity() instanceof LivingEntity living) {
+        DangerClose.detect(level, living);
+      }
+    });
 
     NeoForge.EVENT_BUS.addListener((Consumer<AddServerReloadListenersEvent>) event -> {
       event.addListener(DangerClose.identifier(Constants.MOD_ID), new ResourceReloadListener());
@@ -72,6 +88,7 @@ public class DangerCloseNeoForge {
     @Override
     protected void apply(Void unused, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
       // ModConfig.load(Services.PLATFORM.getConfigDirectory());
+      ModConfigIO.getOrCreate();
     }
 
     @Override
