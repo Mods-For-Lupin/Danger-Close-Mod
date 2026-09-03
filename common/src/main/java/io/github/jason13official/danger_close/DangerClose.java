@@ -24,6 +24,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class DangerClose {
@@ -68,12 +69,12 @@ public class DangerClose {
       spreadFire(living, otherLiving);
     }
 
-    boolean sneaking = living.isShiftKeyDown();
-
-    Holder<Enchantment> frostWalker = living.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER);
-    boolean hasFrostWalker = EnchantmentHelper.getEnchantmentLevel(frostWalker, living) > 0;
-
     if (living.onGround()) {
+
+      boolean sneaking = living.isShiftKeyDown();
+
+      Holder<Enchantment> frostWalker = living.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER);
+      boolean hasFrostWalker = EnchantmentHelper.getEnchantmentLevel(frostWalker, living) > 0;
 
       BlockPos pos = living.blockPosition();
 
@@ -89,12 +90,12 @@ public class DangerClose {
       belowBlockTagStream.forEach(belowReStreamable::add);
 
       detectTorches(living, insideReStreamable, belowReStreamable, hasFrostWalker);
-      detectCampfires(living, insideReStreamable, belowReStreamable, hasFrostWalker);
-      detectStonecutter(living, insideReStreamable, belowReStreamable, living.isShiftKeyDown());
+      detectCampfires(living, insideReStreamable, hasFrostWalker, insideBlockState);
+      detectStonecutter(living, insideReStreamable, belowReStreamable, sneaking);
 
       // only detect magma blocks if we're not inside a cauldron
       if (!(insideBlockState.getBlock() instanceof AbstractCauldronBlock)) {
-        detectMagmaBlock(living, insideReStreamable, belowReStreamable, hasFrostWalker);
+        detectMagmaBlock(living, insideReStreamable, belowReStreamable, hasFrostWalker, sneaking);
       }
     }
   }
@@ -112,24 +113,22 @@ public class DangerClose {
     }
   }
 
-  private static void detectCampfires(LivingEntity living, List<TagKey<Block>> insideReStreamable, List<TagKey<Block>> belowReStreamable, boolean hasFrostWalker) {
+  private static void detectCampfires(LivingEntity living, List<TagKey<Block>> insideReStreamable, boolean hasFrostWalker, BlockState inState) {
     boolean inNormal = insideReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.CAMPFIRE_BURN_DANGER));
-    boolean onNormal = belowReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.CAMPFIRE_BURN_DANGER));
     boolean inSoul = insideReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.SOUL_CAMPFIRE_BURN_DANGER));
-    boolean onSoul = belowReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.SOUL_CAMPFIRE_BURN_DANGER));
 
-    if (ServerConfig.CAMPFIRES_BURN.get() && !hasFrostWalker && (inNormal || onNormal)) {
-      immolate(living);
-    } else if (ServerConfig.SOUL_CAMPFIRES_BURN.get() && !hasFrostWalker && (inSoul || onSoul)) {
-      immolate(living);
+    if (ServerConfig.CAMPFIRES_BURN.get() && !hasFrostWalker && inNormal) {
+      if (inState.hasProperty(CampfireBlock.LIT) && inState.getValue(CampfireBlock.LIT)) immolate(living);
+    } else if (ServerConfig.SOUL_CAMPFIRES_BURN.get() && !hasFrostWalker && inSoul) {
+      if (inState.hasProperty(CampfireBlock.LIT) && inState.getValue(CampfireBlock.LIT)) immolate(living);
     }
   }
 
-  private static void detectMagmaBlock(LivingEntity living, List<TagKey<Block>> insideReStreamable, List<TagKey<Block>> belowReStreamable, boolean hasFrostWalker) {
+  private static void detectMagmaBlock(LivingEntity living, List<TagKey<Block>> insideReStreamable, List<TagKey<Block>> belowReStreamable, boolean hasFrostWalker, boolean sneaking) {
     boolean in = insideReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.MAGMA_BURN_DANGER));
     boolean on = belowReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.MAGMA_BURN_DANGER));
 
-    if (ServerConfig.ENABLE_MAGMA_BLOCK_DAMAGE.get() && !hasFrostWalker && (in || on)) {
+    if (ServerConfig.ENABLE_MAGMA_BLOCK_DAMAGE.get() && !hasFrostWalker && !sneaking && (in || on)) {
       immolate(living);
     }
   }
@@ -139,7 +138,7 @@ public class DangerClose {
     boolean on = belowReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.STONECUTTER_DANGER));
 
     if (ServerConfig.STONECUTTERS_CUT.get() && !isSneaking && (in || on)) {
-      immolate(living);
+      living.hurt(living.level().damageSources().cactus(), 4.0f);
     }
   }
 
