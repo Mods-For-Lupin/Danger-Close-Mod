@@ -15,6 +15,11 @@ dependencies {
     implementation 'com.electronwill.night-config:toml:3.6.0'
     include 'com.electronwill.night-config:core:3.6.0'
     include 'com.electronwill.night-config:toml:3.6.0'
+
+    implementation 'maven.modrinth:monolib:fabric-1.21.1-4.1.0'
+
+    modCompileOnly 'maven.modrinth:prometheus-api:1.2.5-fabric'
+    modCompileOnly 'maven.modrinth:cobweb:1.4.0-fabric'
 }
 
 loom {

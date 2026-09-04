@@ -3,6 +3,14 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+dependencies {
+
+  implementation 'maven.modrinth:monolib:neoforge-1.21.1-4.1.0'
+
+  compileOnly 'maven.modrinth:prometheus-api:1.2.5-neoforge,1.21'
+  compileOnly 'maven.modrinth:cobweb:1.4.0-neoforge,1.21'
+}
+
 neoForge {
     version = neoforge_version
     // Automatically enable neoforge AccessTransformers if the file exists
