@@ -15,7 +15,8 @@ dependencies {
   implementation 'maven.modrinth:monolib:fabric-26.1.2-4.1.1'
 
   // compileOnly 'maven.modrinth:soul-fire-d:6.1.0-fabric'
-  compileOnly 'maven.modrinth:prometheus-api:1.2.5-fabric'
+  compileOnly 'maven.modrinth:prometheus-api:1.2.5-fabric,26.1.2'
+  compileOnly 'maven.modrinth:cobweb:1.4.0-fabric,26.1.2'
 }
 
 loom {

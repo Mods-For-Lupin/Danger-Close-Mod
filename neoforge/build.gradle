@@ -8,7 +8,8 @@ dependencies {
   implementation 'maven.modrinth:monolib:neoforge-26.1.2-4.1.1'
 
   // compileOnly 'maven.modrinth:soul-fire-d:6.1.0-neoforge'
-  compileOnly 'maven.modrinth:prometheus-api:1.2.5-neoforge'
+  compileOnly 'maven.modrinth:prometheus-api:1.2.5-neoforge,26.1.2'
+  compileOnly 'maven.modrinth:cobweb:1.4.0-neoforge,26.1.2'
 }
 
 neoForge {
