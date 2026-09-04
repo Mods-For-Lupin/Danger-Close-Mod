@@ -1,5 +1,6 @@
 package io.github.jason13official.danger_close;
 
+import io.github.jason13official.danger_close.impl.common.compat.Prometheus;
 import io.github.jason13official.danger_close.impl.common.config.ModConfigIO;
 import io.github.jason13official.danger_close.impl.common.config.ServerConfig;
 import io.github.jason13official.danger_close.platform.Services;
@@ -35,7 +36,8 @@ public class DangerClose {
   public static final TagKey<Block> SOUL_CAMPFIRE_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("soul_campfire_burn_danger"));
   public static final TagKey<Block> MAGMA_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("magma_burn_danger"));
   public static final TagKey<Block> STONECUTTER_DANGER = TagKey.create(Registries.BLOCK, identifier("stonecutter_danger"));
-  public static boolean SOUL_FIRE_D = false;
+
+  public static boolean PROMETHEUS_FOUND = false;
 
   public static void init() {
 
@@ -43,15 +45,17 @@ public class DangerClose {
 
     ModConfigIO.getOrCreate();
 
-    SOUL_FIRE_D = Services.PLATFORM.isModLoaded("soul_fire_d");
+    PROMETHEUS_FOUND = Services.PLATFORM.isModLoaded("prometheus");
   }
 
   public static Identifier identifier(final String path) {
+
     return Identifier.fromNamespaceAndPath(Constants.MOD_ID, path);
   }
 
   public static void immolate(LivingEntity entity) {
-    entity.setRemainingFireTicks(20 * 2); // for 40 ticks, or 2 seconds
+
+    if (!entity.isOnFire()) entity.setRemainingFireTicks(20 * 2); // for 40 ticks, or 2 seconds
   }
 
   public static void detect(ServerLevel level, LivingEntity living) {
@@ -109,6 +113,12 @@ public class DangerClose {
     if (ServerConfig.TORCHES_BURN.get() && !hasFrostWalker && (inNormal || onNormal)) {
       immolate(living);
     } else if (ServerConfig.SOUL_TORCHES_BURN.get() && !hasFrostWalker && (inSoul || onSoul)) {
+
+      if (PROMETHEUS_FOUND) {
+        Prometheus.immolateSoul(living, 2);
+        return;
+      }
+
       immolate(living);
     }
   }
@@ -120,7 +130,15 @@ public class DangerClose {
     if (ServerConfig.CAMPFIRES_BURN.get() && !hasFrostWalker && inNormal) {
       if (inState.hasProperty(CampfireBlock.LIT) && inState.getValue(CampfireBlock.LIT)) immolate(living);
     } else if (ServerConfig.SOUL_CAMPFIRES_BURN.get() && !hasFrostWalker && inSoul) {
-      if (inState.hasProperty(CampfireBlock.LIT) && inState.getValue(CampfireBlock.LIT)) immolate(living);
+      if (inState.hasProperty(CampfireBlock.LIT) && inState.getValue(CampfireBlock.LIT)) {
+
+        if (PROMETHEUS_FOUND) {
+          Prometheus.immolateSoul(living, 2);
+          return;
+        }
+
+        immolate(living);
+      }
     }
   }
 

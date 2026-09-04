@@ -12,6 +12,9 @@ dependencies {
   compileOnly 'com.electronwill.night-config:toml:3.6.0'
 
   implementation 'monolib:monolib-common:26.1.2-4.1.0'
+
+  // implementation project(':common').files('libs/soul-fire-d-common-26.1.2-6.1.0.jar')
+  implementation project(':common').files('libs/prometheus-common-26.1-1.2.5.jar')
 }
 
 neoForge {

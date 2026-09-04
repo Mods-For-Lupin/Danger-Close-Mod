@@ -6,6 +6,9 @@ plugins {
 dependencies {
 
   implementation 'maven.modrinth:monolib:neoforge-26.1.2-4.1.1'
+
+  // compileOnly 'maven.modrinth:soul-fire-d:6.1.0-neoforge'
+  compileOnly 'maven.modrinth:prometheus-api:1.2.5-neoforge'
 }
 
 neoForge {
