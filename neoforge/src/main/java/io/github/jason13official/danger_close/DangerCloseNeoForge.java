@@ -49,7 +49,7 @@ public class DangerCloseNeoForge {
 
     EVENT_BUS.addListener((Consumer<FMLCommonSetupEvent>) event -> DangerClose.init());
 
-    EVENT_BUS.addListener((Consumer<EntityTickEvent.Pre>) event -> {
+    NeoForge.EVENT_BUS.addListener((Consumer<EntityTickEvent.Pre>) event -> {
 
       Level abstractLevel = event.getEntity().level();
 
