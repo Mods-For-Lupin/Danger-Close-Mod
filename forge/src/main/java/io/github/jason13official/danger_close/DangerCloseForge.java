@@ -14,12 +14,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -44,6 +48,18 @@ public class DangerCloseForge {
     bind(Registries.CREATIVE_MODE_TAB, ModTabs::register);
 
     EVENT_BUS.addListener((Consumer<FMLCommonSetupEvent>) event -> DangerClose.init());
+
+    // beginning of livint entity tick
+    MinecraftForge.EVENT_BUS.addListener((Consumer<LivingTickEvent>) event -> {
+
+      Level abstractLevel = event.getEntity().level();
+      LivingEntity living = event.getEntity();
+
+      if (abstractLevel instanceof ServerLevel level &&
+          level.getGameTime() % 2 == 0) {
+        DangerClose.detect(level, living);
+      }
+    });
 
     MinecraftForge.EVENT_BUS.addListener((Consumer<AddReloadListenerEvent>) event -> {
       event.addListener(new ResourceReloadListener());
