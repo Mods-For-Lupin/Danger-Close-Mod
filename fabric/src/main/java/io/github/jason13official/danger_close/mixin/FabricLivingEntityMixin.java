@@ -11,20 +11,20 @@ import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Entity.class)
-public class FabricEntityMixin {
+@Mixin(LivingEntity.class)
+public class FabricLivingEntityMixin {
 
-  @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", shift = Shift.AFTER), method = "rideTick")
+  // @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", shift = Shift.AFTER), method = "rideTick")
+  @Inject(at = @At(value = "HEAD"), method = "tick")
   private void danger_close$rideTick(CallbackInfo ci) {
 
-    Entity self = (Entity) (Object) this;
+    LivingEntity self = (LivingEntity) (Object) this;
 
     Level abstractLevel = self.level();
 
     if (abstractLevel instanceof ServerLevel level &&
-        level.getGameTime() % 2 == 0 &&
-        self instanceof LivingEntity living) {
-      DangerClose.detect(level, living);
+        level.getGameTime() % 2 == 0) {
+      DangerClose.detect(level, self);
     }
   }
 }
