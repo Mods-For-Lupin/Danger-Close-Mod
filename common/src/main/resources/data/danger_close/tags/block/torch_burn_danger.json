@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "minecraft:torch",
-    "minecraft:wall_torch"
+    "minecraft:wall_torch",
+    {
+      "id": "#more_beautiful_torches:normal_torches",
+      "required": false
+    }
   ]
 }

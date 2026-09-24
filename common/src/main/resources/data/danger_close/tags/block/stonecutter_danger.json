@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:stonecutter"
+    "minecraft:stonecutter",
+    "#danger_close:corail_woodcutters"
   ]
 }
