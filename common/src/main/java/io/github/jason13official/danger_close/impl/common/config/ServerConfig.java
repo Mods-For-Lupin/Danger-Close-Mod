@@ -8,6 +8,7 @@ public class ServerConfig {
 
   private static boolean torchesBurn = false;
   private static boolean soulTorchesBurn = false;
+  private static boolean copperTorchesBurn = false;
   private static boolean campfiresBurn = true;
   private static boolean soulCampfiresBurn = true;
   private static boolean stonecuttersCut = true;
@@ -19,6 +20,7 @@ public class ServerConfig {
 
   public static Commented<Boolean> TORCHES_BURN = new Commented<>("torches_burn", () -> torchesBurn, value -> torchesBurn = value, "Torches ignite entities?");
   public static Commented<Boolean> SOUL_TORCHES_BURN = new Commented<>("soul_torches_burn", () -> soulTorchesBurn, value -> soulTorchesBurn = value, "Soul Torches ignite entities?");
+  public static Commented<Boolean> COPPER_TORCHES_BURN = new Commented<>("copper_torches_burn", () -> copperTorchesBurn, value -> copperTorchesBurn = value, "Copper Torches ignite entities?");
   public static Commented<Boolean> CAMPFIRES_BURN = new Commented<>("campfires_burn", () -> campfiresBurn, value -> campfiresBurn = value, "Campfires ignite entities?");
   public static Commented<Boolean> SOUL_CAMPFIRES_BURN = new Commented<>("soul_campfires_burn", () -> soulCampfiresBurn, value -> soulCampfiresBurn = value, "Soul Campfires ignite entities?");
   public static Commented<Boolean> STONECUTTERS_CUT = new Commented<>("stonecutters_cut", () -> stonecuttersCut, value -> stonecuttersCut = value, "Stonecutters hurt entities?");

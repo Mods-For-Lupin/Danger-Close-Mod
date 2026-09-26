@@ -32,6 +32,7 @@ public class DangerClose {
 
   public static final TagKey<Block> TORCH_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("torch_burn_danger"));
   public static final TagKey<Block> SOUL_TORCH_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("soul_torch_burn_danger"));
+  public static final TagKey<Block> COPPER_TORCH_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("copper_torch_burn_danger"));
   public static final TagKey<Block> CAMPFIRE_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("campfire_burn_danger"));
   public static final TagKey<Block> SOUL_CAMPFIRE_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("soul_campfire_burn_danger"));
   public static final TagKey<Block> MAGMA_BURN_DANGER = TagKey.create(Registries.BLOCK, identifier("magma_burn_danger"));
@@ -109,6 +110,8 @@ public class DangerClose {
     boolean onNormal = belowReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.TORCH_BURN_DANGER));
     boolean inSoul = insideReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.SOUL_TORCH_BURN_DANGER));
     boolean onSoul = belowReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.SOUL_TORCH_BURN_DANGER));
+    boolean inCopper = insideReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.COPPER_TORCH_BURN_DANGER));
+    boolean onCopper = belowReStreamable.stream().anyMatch(Predicate.isEqual(DangerClose.COPPER_TORCH_BURN_DANGER));
 
     if (ServerConfig.TORCHES_BURN.get() && !hasFrostWalker && (inNormal || onNormal)) {
       immolate(living);
@@ -116,6 +119,18 @@ public class DangerClose {
 
       if (PROMETHEUS_FOUND) {
         Prometheus.immolateSoul(living, 2);
+        return;
+      }
+
+      immolate(living);
+    } else if (ServerConfig.COPPER_TORCHES_BURN.get() && !hasFrostWalker && (inCopper || onCopper)) {
+
+      if (Services.PLATFORM.isDevelopmentEnvironment()) {
+        System.out.println("copper immolation!!!");
+      }
+
+      if (PROMETHEUS_FOUND) {
+        Prometheus.immolateCopper(living, 2);
         return;
       }
 

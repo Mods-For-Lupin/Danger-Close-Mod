@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:copper_torch",
+    "minecraft:copper_wall_torch",
+    {
+      "id": "#more_beautiful_torches:copper_torches",
+      "required": false
+    }
+  ]
+}

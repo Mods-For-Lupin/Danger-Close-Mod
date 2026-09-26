@@ -16,6 +16,11 @@ public class Prometheus {
     setOnTypedFire(entity, seconds, FireManager.SOUL_FIRE_TYPE);
   }
 
+  public static void immolateCopper(Entity entity, int seconds) {
+
+    setOnTypedFire(entity, seconds, FireManager.COPPER_FIRE_TYPE);
+  }
+
   private static void setOnTypedFire(Entity entity, int seconds, Identifier fireType) {
 
     FireManager.setOnFire(entity, seconds, fireType);

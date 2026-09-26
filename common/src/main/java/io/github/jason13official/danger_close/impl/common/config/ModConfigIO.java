@@ -34,6 +34,7 @@ public class ModConfigIO {
       ServerConfig.ENABLED.set(config.getOrElse(ServerConfig.ENABLED.key(), ServerConfig.ENABLED.get()));
       ServerConfig.TORCHES_BURN.set(config.getOrElse(ServerConfig.TORCHES_BURN.key(), ServerConfig.TORCHES_BURN.get()));
       ServerConfig.SOUL_TORCHES_BURN.set(config.getOrElse(ServerConfig.SOUL_TORCHES_BURN.key(), ServerConfig.SOUL_TORCHES_BURN.get()));
+      ServerConfig.COPPER_TORCHES_BURN.set(config.getOrElse(ServerConfig.COPPER_TORCHES_BURN.key(), ServerConfig.COPPER_TORCHES_BURN.get()));
       ServerConfig.CAMPFIRES_BURN.set(config.getOrElse(ServerConfig.CAMPFIRES_BURN.key(), ServerConfig.CAMPFIRES_BURN.get()));
       ServerConfig.SOUL_CAMPFIRES_BURN.set(config.getOrElse(ServerConfig.SOUL_CAMPFIRES_BURN.key(), ServerConfig.SOUL_CAMPFIRES_BURN.get()));
       ServerConfig.STONECUTTERS_CUT.set(config.getOrElse(ServerConfig.STONECUTTERS_CUT.key(), ServerConfig.STONECUTTERS_CUT.get()));
@@ -46,6 +47,7 @@ public class ModConfigIO {
       config.setComment(ServerConfig.ENABLED.key(), ServerConfig.ENABLED.comment());
       config.setComment(ServerConfig.TORCHES_BURN.key(), ServerConfig.TORCHES_BURN.comment());
       config.setComment(ServerConfig.SOUL_TORCHES_BURN.key(), ServerConfig.SOUL_TORCHES_BURN.comment());
+      config.setComment(ServerConfig.COPPER_TORCHES_BURN.key(), ServerConfig.COPPER_TORCHES_BURN.comment());
       config.setComment(ServerConfig.CAMPFIRES_BURN.key(), ServerConfig.CAMPFIRES_BURN.comment());
       config.setComment(ServerConfig.SOUL_CAMPFIRES_BURN.key(), ServerConfig.SOUL_CAMPFIRES_BURN.comment());
       config.setComment(ServerConfig.STONECUTTERS_CUT.key(), ServerConfig.STONECUTTERS_CUT.comment());
@@ -56,6 +58,7 @@ public class ModConfigIO {
       config.set(ServerConfig.ENABLED.key(), ServerConfig.ENABLED.get());
       config.set(ServerConfig.TORCHES_BURN.key(), ServerConfig.TORCHES_BURN.get());
       config.set(ServerConfig.SOUL_TORCHES_BURN.key(), ServerConfig.SOUL_TORCHES_BURN.get());
+      config.set(ServerConfig.COPPER_TORCHES_BURN.key(), ServerConfig.COPPER_TORCHES_BURN.get());
       config.set(ServerConfig.CAMPFIRES_BURN.key(), ServerConfig.CAMPFIRES_BURN.get());
       config.set(ServerConfig.SOUL_CAMPFIRES_BURN.key(), ServerConfig.SOUL_CAMPFIRES_BURN.get());
       config.set(ServerConfig.STONECUTTERS_CUT.key(), ServerConfig.STONECUTTERS_CUT.get());
