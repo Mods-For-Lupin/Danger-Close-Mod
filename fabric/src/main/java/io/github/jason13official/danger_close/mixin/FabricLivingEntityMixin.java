@@ -22,7 +22,7 @@ public class FabricLivingEntityMixin {
     Level abstractLevel = self.level();
 
     if (abstractLevel instanceof ServerLevel level &&
-        level.getGameTime() % 2 == 0) {
+        DangerClose.isTickSlot(level, self)) {
       DangerClose.detect(level, self);
     }
   }

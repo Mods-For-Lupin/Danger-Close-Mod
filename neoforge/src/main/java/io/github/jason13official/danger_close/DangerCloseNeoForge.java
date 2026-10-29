@@ -32,7 +32,7 @@ public class DangerCloseNeoForge {
 
       Level abstractLevel = event.getEntity().level();
 
-      if (abstractLevel instanceof ServerLevel level && level.getGameTime() % 2 == 0 && event.getEntity() instanceof LivingEntity living) {
+      if (abstractLevel instanceof ServerLevel level && event.getEntity() instanceof LivingEntity living && DangerClose.isTickSlot(level, living)) {
         DangerClose.detect(level, living);
       }
     });
