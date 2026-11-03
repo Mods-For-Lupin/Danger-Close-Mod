@@ -6,6 +6,10 @@
     {
       "id": "#more_beautiful_torches:soul_torches",
       "required": false
+    },
+    {
+      "id": "#more_beautiful_torches_bop:soul_torches",
+      "required": false
     }
   ]
 }
