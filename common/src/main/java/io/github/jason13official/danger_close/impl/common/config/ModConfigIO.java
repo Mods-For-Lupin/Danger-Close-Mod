@@ -19,7 +19,7 @@ public class ModConfigIO {
       return;
     }
 
-    Path configFilepath = configDir.resolve("danger_closer-server.toml");
+    Path configFilepath = configDir.resolve("danger_close-server.toml");
     File configFile = new File(configFilepath.toUri());
 
     Config.setInsertionOrderPreserved(true);
