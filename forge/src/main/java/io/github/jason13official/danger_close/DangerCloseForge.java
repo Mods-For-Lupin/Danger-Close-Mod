@@ -56,7 +56,7 @@ public class DangerCloseForge {
       LivingEntity living = event.getEntity();
 
       if (abstractLevel instanceof ServerLevel level &&
-          level.getGameTime() % 2 == 0) {
+          DangerClose.isTickSlot(level, living)) {
         DangerClose.detect(level, living);
       }
     });
