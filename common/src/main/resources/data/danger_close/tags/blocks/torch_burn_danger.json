@@ -6,6 +6,10 @@
     {
       "id": "#more_beautiful_torches:normal_torches",
       "required": false
+    },
+    {
+      "id": "#more_beautiful_torches_bop:normal_torches",
+      "required": false
     }
   ]
 }

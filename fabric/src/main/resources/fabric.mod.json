@@ -17,9 +17,6 @@
   "entrypoints": {
     "main": [
       "io.github.jason13official.danger_close.DangerCloseFabric"
-    ],
-    "client": [
-      "io.github.jason13official.danger_close.DangerCloseClientFabric"
     ]
   },
   "mixins": [

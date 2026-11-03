@@ -5,37 +5,28 @@ import io.github.jason13official.danger_close.platform.services.IPlatformHelper;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
-/// @see <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html">ServiceLoader</a> Oracle's Javadoc
 public class Services {
 
   public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
 
-  /// modified from MultiLoader-Template original to enable merged service loader files i.e. our merged `io.github.jason13official.danger_close.platform.services.IPlatformHelper` might contain:
-  ///
-  /// ```
-  /// io.github.jason13official.danger_close.platform.FabricPlatformHelper
-  /// io.github.jason13official.danger_close.platform.ForgePlatformHelper
-  /// ```
   private static <T> T load(Class<T> clazz) {
 
-    boolean inDevHelperLoaded = PLATFORM != null && PLATFORM.isDevelopmentEnvironment();
+    Constants.LOG.info("Loading service {}", clazz);
 
-    if (inDevHelperLoaded) {
-      Constants.LOG.info("Loading service {} on {}", clazz.getName(), PLATFORM.getPlatformName());
-    }
-
+    // A merged multi-loader jar carries every platform's provider entry in
+    // META-INF/services, so ServiceLoader can hand back a provider whose
+    // backing classes aren't on this platform's classpath. Touch a real
+    // platform call per candidate - the wrong one throws NoClassDefFoundError
+    // here, and we skip to the next entry instead of crashing.
     for (T helper : ServiceLoader.load(clazz)) {
       try {
-
-        if (PLATFORM == null && (helper instanceof IPlatformHelper platform && platform.isDevelopmentEnvironment())) {
-          Constants.LOG.info("Trying helper {} for service {} on {}", helper, clazz.getName(), platform.getPlatformName());
+        boolean dev = helper instanceof IPlatformHelper platform && platform.isDevelopmentEnvironment();
+        if (dev) {
+          Constants.LOG.info("Loaded {} for service {}", helper, clazz);
         }
-
         return helper;
       } catch (NoClassDefFoundError | ServiceConfigurationError e) {
-
-        String s = e instanceof NoClassDefFoundError ? "helper definition not found; ignore this warning for merged mod files." : "helper service has malformed configuration.";
-        Constants.LOG.info("Skipping {}, {}", helper.getClass().getName(), s);
+        Constants.LOG.debug("Skipping incompatible platform helper {}", helper.getClass().getName());
       }
     }
 
