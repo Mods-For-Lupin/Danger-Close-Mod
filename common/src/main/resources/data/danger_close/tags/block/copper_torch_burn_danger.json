@@ -6,6 +6,10 @@
     {
       "id": "#more_beautiful_torches:copper_torches",
       "required": false
+    },
+    {
+      "id": "#more_beautiful_torches_bop:copper_torches",
+      "required": false
     }
   ]
 }

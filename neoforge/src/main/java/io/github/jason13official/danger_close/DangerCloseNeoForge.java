@@ -1,34 +1,19 @@
 package io.github.jason13official.danger_close;
 
 import io.github.jason13official.danger_close.impl.common.config.ModConfigIO;
-import io.github.jason13official.danger_close.impl.common.registry.ModBlocks;
-import io.github.jason13official.danger_close.impl.common.registry.ModEntities;
-import io.github.jason13official.danger_close.impl.common.registry.ModItems;
-import io.github.jason13official.danger_close.impl.common.registry.ModMenus;
-import io.github.jason13official.danger_close.impl.common.registry.ModParticles;
-import io.github.jason13official.danger_close.impl.common.registry.ModTabs;
-import io.github.jason13official.danger_close.impl.common.registry.ModTiles;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.registries.RegisterEvent;
 
 @Mod(Constants.MOD_ID)
 public class DangerCloseNeoForge {
@@ -38,14 +23,6 @@ public class DangerCloseNeoForge {
   public DangerCloseNeoForge(final IEventBus modEventBus) {
 
     EVENT_BUS = modEventBus;
-
-    bind(Registries.BLOCK, ModBlocks::register);
-    bind(Registries.ENTITY_TYPE, ModEntities::register);
-    bind(Registries.ITEM, ModItems::register);
-    bind(Registries.PARTICLE_TYPE, ModParticles::register);
-    bind(Registries.BLOCK_ENTITY_TYPE, ModTiles::register);
-    bind(Registries.MENU, ModMenus::register);
-    bind(Registries.CREATIVE_MODE_TAB, ModTabs::register);
 
     EVENT_BUS.addListener((Consumer<FMLCommonSetupEvent>) event -> DangerClose.init());
 
@@ -62,19 +39,6 @@ public class DangerCloseNeoForge {
 
     NeoForge.EVENT_BUS.addListener((Consumer<AddServerReloadListenersEvent>) event -> {
       event.addListener(DangerClose.identifier(Constants.MOD_ID), new ResourceReloadListener());
-    });
-
-    if (FMLLoader.getCurrent().getDist() == Dist.CLIENT) {
-      new DangerCloseClientNeoForge(EVENT_BUS);
-    }
-  }
-
-  public <T> void bind(ResourceKey<Registry<T>> registryKey, Consumer<BiConsumer<T, Identifier>> source) {
-
-    EVENT_BUS.addListener((Consumer<RegisterEvent>) event -> {
-      if (registryKey.equals(event.getRegistryKey())) {
-        source.accept((t, rl) -> event.register(registryKey, rl, () -> t));
-      }
     });
   }
 
